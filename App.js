@@ -11,6 +11,9 @@ import About from "./screens/about";
 import Setting from "./screens/setting";
 import Product from "./screens/product";
 import ProductDetail from './screens/productdetail';
+import AddProduct from './screens/addproduct';
+import Book from './screens/book';
+import AddBook from './screens/addbook';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -73,6 +76,9 @@ function DrawerHome() {
     <Drawer.Navigator initialRouteName="Home">
       <Drawer.Screen name="Main" component={Home}
         options={{ headerShown: true }} />
+      <Drawer.Screen name="Books" component={Book}/>
+      <Drawer.Screen name="Add Book" component={AddBook}/>
+      <Drawer.Screen name="Add Product" component={AddProduct}/>
       <Drawer.Screen name="Setting" component={Setting} />
     </Drawer.Navigator>
   );

@@ -14,6 +14,7 @@ import ProductDetail from './screens/productdetail';
 import AddProduct from './screens/addproduct';
 import Book from './screens/book';
 import AddBook from './screens/addbook';
+import Quiz from './screens/quiz';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -79,6 +80,7 @@ function DrawerHome() {
       <Drawer.Screen name="Books" component={Book}/>
       <Drawer.Screen name="Add Book" component={AddBook}/>
       <Drawer.Screen name="Add Product" component={AddProduct}/>
+      <Drawer.Screen name="Quiz" component={Quiz}/>
       <Drawer.Screen name="Setting" component={Setting} />
     </Drawer.Navigator>
   );

@@ -1,13 +1,22 @@
 import { StyleSheet, View, Text } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import React from "react";
+import { Card } from '@rneui/themed';
 
 function showData(data) {
     return <FlatList
         data={data}
         keyExtractor={(item) => item.person_id.toString()}
         renderItem={({ item }) => (
-            <Text>{item.person_name}</Text>
+            <Card>
+                <Card.Title>{item.person_name}</Card.Title>
+                <Card.Image
+                    style={styles.imgavatar}
+                    source={{
+                        uri:
+                            item.person_url_photo
+                    }} />
+            </Card>
         )}
     />
 }
@@ -39,7 +48,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    imgresep: {
+    imgavatar: {
         width: 300,
         height: 400,
     },

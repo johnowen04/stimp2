@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card } from '@rneui/themed';
 
 function showData(data) {
@@ -10,11 +10,10 @@ function showData(data) {
         renderItem={({ item }) => (
             <Card>
                 <Card.Title>{item.person_name}</Card.Title>
-                <Card.Image
-                    style={styles.imgavatar}
+                <Card.Image style={styles.imgresep}
                     source={{
                         uri:
-                            item.person_url_photo
+                            item.person_url
                     }} />
             </Card>
         )}
@@ -22,22 +21,26 @@ function showData(data) {
 }
 
 export default function PopularActor({ navigation }) {
-    const movies = () => {
-        fetch('http://ubaya.fun/react/160420016/popularactor.php', {
+    const [actors, setActors] = useState([]);
+
+    useEffect(() => {
+        fetch('https://ubaya.me/react/160420016/popularactor.php', {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json'
             }
         }).then((response) => response.json()).then((json) => {
-            return json.actors;
+            setActors(json.data);
         }).catch((error) => console.error(error));
-    }
+    });
+
+
 
     return (
         <View style={styles.vparent}>
             <Text >Ini Popular Actor</Text>
-            {showData(movies)}
+            {showData(actors)}
         </View>
     );
 }

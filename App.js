@@ -1,9 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, DevSettings } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Home from './screens/home';
@@ -17,18 +17,93 @@ import AddBook from './screens/addbook';
 import Quiz from './screens/quiz';
 import PopularActor from './screens/popularactor';
 import PopularMovie from './screens/popularmovie';
+import React from 'react';
+import Login from './screens/login';
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import DetailMovie from './screens/detailmovie';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
-export default function App() {
+export default class App extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      isLogin: false,
+    }
+
+    this.cekLogin().then((item) => {
+      if (item != null) {
+        this.setState(
+          this.state = {
+            islogin: true
+          })
+      }
+    })
+  }
+
+  cekLogin = async () => {
+    try {
+      const value = await AsyncStorage.getItem('username');
+      if (value !== null) {
+        return value;
+      }
+    } catch (e) {
+      // error reading value
+    }
+  }
+
+  render() {
+    if (!this.state.islogin) {
+      return (
+        <NavigationContainer><Stack.Navigator>
+          <Stack.Screen name="Login" component={Login} />
+        </Stack.Navigator>
+        </NavigationContainer>);
+    } else {
+
+      return (
+        <NavigationContainer>
+          <Nav1></Nav1>
+        </NavigationContainer>
+      );
+    }
+  }
+
+  doLogout = async () => {
+    try {
+      await AsyncStorage.removeItem('username');
+      alert('logged out');
+      DevSettings.reload();
+    } catch (e) {
+    }
+  }
+}
+
+function CustomDrawerContent(props) {
   return (
-    <NavigationContainer>
-      <Nav1></Nav1>
-    </NavigationContainer>
+    <DrawerContentScrollView {...props}>
+      <DrawerItemList {...props} />
+      <DrawerItem label={() => <Text>Logout</Text>}
+        onPress={() => alert('Logged out')}
+      />
+    </DrawerContentScrollView>
   );
 }
+
+function NavMovie() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="PopularMovie" component={PopularMovie}
+        options={{ headerShown: false }} />
+      <Stack.Screen name="DetailMovie" component={DetailMovie} />
+    </Stack.Navigator>
+  );
+}
+
 function Nav1() {
   return (
     <Tab.Navigator
@@ -76,15 +151,15 @@ function Nav2() {
 
 function DrawerHome() {
   return (
-    <Drawer.Navigator initialRouteName="Home">
+    <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props} />} initialRouteName="Home">
       <Drawer.Screen name="Main" component={Home}
         options={{ headerShown: true }} />
-      <Drawer.Screen name="Books" component={Book}/>
-      <Drawer.Screen name="Add Book" component={AddBook}/>
-      <Drawer.Screen name="Add Product" component={AddProduct}/>
-      <Drawer.Screen name="Quiz" component={Quiz}/>
+      <Drawer.Screen name="Books" component={Book} />
+      <Drawer.Screen name="Add Book" component={AddBook} />
+      <Drawer.Screen name="Add Product" component={AddProduct} />
+      <Drawer.Screen name="Quiz" component={Quiz} />
       <Drawer.Screen name="Setting" component={Setting} />
-      <Drawer.Screen name="PopularMovie" component={PopularMovie} />
+      <Drawer.Screen name="Popular Movie" component={NavMovie} />
       <Drawer.Screen name="PopularActor" component={PopularActor} />
     </Drawer.Navigator>
   );

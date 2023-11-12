@@ -10,7 +10,7 @@ function showData(data) {
         renderItem={({ item }) => (
             <Card>
                 <Card.Title>{item.person_name}</Card.Title>
-                <Card.Image style={styles.imgresep}
+                <Card.Image style={styles.imgavatar}
                     source={{
                         uri:
                             item.person_url

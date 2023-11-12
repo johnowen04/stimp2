@@ -33,7 +33,7 @@ export default function PopularActor({ navigation }) {
         }).then((response) => response.json()).then((json) => {
             setActors(json.data);
         }).catch((error) => console.error(error));
-    });
+    }, []);
 
 
 
